@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Audit Tie-Out Engine | Local AI Edition</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="brand">
+      <h2>AuditTie <span>| 100% Local Matrix Engine</span></h2>
+    </div>
+    <div class="header-controls">
+      <label class="control-label" style="cursor: pointer;" title="Use local browser AI to match abbreviations">
+        <input type="checkbox" id="llm-toggle" checked> 🧠 Enable Local Semantic AI
+      </label>
+      
+      <div style="width: 1px; height: 20px; background: var(--border); margin: 0 8px;"></div>
+
+      <label class="control-label">
+        Tolerance ($):
+        <input type="number" id="tolerance-input" value="1.00" step="0.01" min="0" class="input-dark" style="width: 65px;">
+      </label>
+      <button type="button" id="btn-export" class="btn btn-secondary" disabled>⬇ Export Master Tie-Out</button>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <section class="upload-bar">
+      <div class="upload-card full-width">
+        <label>1. Upload Master Workbook</label>
+        <input type="file" id="file-wb" accept=".xlsx, .xls, .csv">
+        <span id="upload-hint" class="file-hint">Upload the file containing both your GRP and TB sheets.</span>
+      </div>
+
+      <div class="mapping-container" id="mapping-container" style="display: none;">
+        <div class="mapping-col">
+          <label class="accent-text">Summary Sheet (FS)</label>
+          <select id="sheet-summary" class="select-single"></select>
+        </div>
+        
+        <div class="mapping-col">
+          <label class="accent-text">Subledger Sheets (TBs)</label>
+          <select id="sheet-tbs" multiple class="select-multi" title="Hold Ctrl/Cmd to select"></select>
+        </div>
+      </div>
+
+      <button type="button" id="btn-run" class="btn btn-primary" disabled>Run Auto Matrix Tie-Out</button>
+    </section>
+
+    <section class="results-container">
+      <div class="panel">
+        <h3>Master Tie-Out Workpaper</h3>
+        <div class="table-wrap">
+          <table id="table-results">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Account (GRP)</th>
+                <th>Target TB</th>
+                <th>GRP Amount</th>
+                <th>TB Sum</th>
+                <th>Variance</th>
+                <th>Tick Mark</th>
+                <th>AI Matching Logic</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="8" class="empty-state">Upload workbook and run engine</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel details-panel">
+        <h3>Contributing TB Rows</h3>
+        <p class="panel-subtitle" id="detail-subtitle">Select a line item on the left to inspect</p>
+        <div class="table-wrap">
+          <table id="table-support-breakdown">
+            <thead>
+              <tr>
+                <th>Description (Found in TB)</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="2" class="empty-state">No item selected</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="engine.js"></script>
+</body>
+</html>
